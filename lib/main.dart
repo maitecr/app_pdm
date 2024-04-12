@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 
 main() => runApp(MyApp());
@@ -20,7 +22,7 @@ class MainScreen extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
@@ -37,6 +39,27 @@ class MainScreen extends StatelessWidget {
                 ],
               ),
             ),
+
+            ListTile(
+              title: Text('Login'),
+              onTap: () {
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+            ),
+
+            ListTile(
+              title: Text('Trocar Senha'),
+              onTap: () {
+                 Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => ChangePasswordPage()),
+                );
+              },
+            )
+
           ]
         ),
       ),
@@ -52,6 +75,66 @@ class MainScreen extends StatelessWidget {
       ),
 
 
+    );
+  }
+}
+
+
+class FormExample extends StatefulWidget {
+
+  @override
+  State<FormExample> createState() => _FormExampleState();
+}
+
+class _FormExampleState extends State<FormExample> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            decoration: const InputDecoration(
+              hintText: 'Digite seu e-mail',
+            ),
+          ),
+
+          TextFormField(
+            decoration: const InputDecoration(
+              hintText: 'Digite sua senha'
+            ),
+          )
+
+        ],
+      ),
+    );
+  }
+
+}
+
+
+
+class ChangePasswordPage extends StatelessWidget {
+    @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Trocar Senha'),
+      ),
+    );
+  }
+}
+
+
+class LoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
     );
   }
 }
