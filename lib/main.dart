@@ -1,19 +1,25 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_key_in_widget_constructors
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext) {
-    return MaterialApp(home: MainScreen());
+    return MaterialApp(home: MainScreen(),
+/*      initialRoute: '/',
+      routes: {
+        '/': (context) => MainScreen(),
+      },*/
+    );
   }
 }
 
-class MainScreen extends StatelessWidget {
-  
-  @override
+
+class MainScreenState extends State<MainScreen> {
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
@@ -68,18 +74,52 @@ class MainScreen extends StatelessWidget {
       ),
 
       body: Center(
-        child: Image.asset(
-          'assets/jiji.jpg',
-          fit: BoxFit.fill),
+              child: Image.asset(
+              'assets/jiji.jpg'
+              ),
+            ),
+      );
+  }
+}
+
+class MainScreen extends StatefulWidget {
+  @override
+  State<MainScreen> createState() => MainScreenState();
+}
+
+
+class Page02 extends StatefulWidget {
+  String email;
+  String password;
+
+  Page02({required this.email, required this.password});
+
+  @override
+  State<Page02> createState() => Page02State();
+}
+
+class Page02State extends State<Page02> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dados Login'),
       ),
 
-
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Text(widget.email),
+            Text(widget.password)
+          ],
+        ),
+      ),
     );
   }
 }
 
 
-class LoginPage extends StatelessWidget {
+class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,25 +127,39 @@ class LoginPage extends StatelessWidget {
         title: Text('Login'),
       ),
 
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: FormLogin(),
-      )
+      body: Center( 
+        child: Column(
+          children: <Widget>[
+            FormLogin(),
+          ] 
+        ),
+        
+      ),
     );
   }
 }
 
-class FormLogin extends StatefulWidget {
-
+class LoginPage extends StatefulWidget {
   @override
-  State<FormLogin> createState() => _FormLoginState();
+  State<LoginPage> createState() => LoginPageState();
 }
 
 class _FormLoginState extends State<FormLogin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _email = '';
-  String _password = '';
+  TextEditingController txtemail = TextEditingController();
+  TextEditingController txtpassword = TextEditingController();
+
+  void SaveData() {
+
+    String email = txtemail.text;
+    String password = txtpassword.text;
+
+    print(email);
+    print(password);
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Page02(email: email, password: password)));
+  }
 
   Widget build(BuildContext context) {
     return Form(
@@ -114,6 +168,7 @@ class _FormLoginState extends State<FormLogin> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
+            controller: txtemail,
             decoration: const InputDecoration(
               hintText: 'Digite seu e-mail',
             ),
@@ -121,16 +176,12 @@ class _FormLoginState extends State<FormLogin> {
               if (value!.isEmpty) {
                 return 'Campo não pode ser deixado em branco';
               }
-
-              return null;
-            },
-            onSaved: (value) {
-              _email = value!;
             },
           ),
 
           TextFormField(
-//            obscureText: true,
+            obscureText: true,
+            controller: txtpassword,
             decoration: const InputDecoration(
               hintText: 'Digite sua senha'
             ),
@@ -144,29 +195,29 @@ class _FormLoginState extends State<FormLogin> {
               }
 
               if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[!@#$&*])').hasMatch(value)) {
-                return 'Senha deve uma letra maiúscula,\n uma letra minúscula e um caractere especial';
+                return ' Senha deve uma letra maiúscula,\numa letra minúscula e um caractere especial';
               }
-
-              return null;
-            },
-            onSaved: (value) {
-              _password = value!;
             },
           ),
 
           ElevatedButton(
             onPressed: () {
               if(_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-                print('$_email');
-                print('$_password');
+                Navigator.push(context,  MaterialPageRoute(builder: ((context) => Page02(email: txtemail.text, password: txtpassword.text,))));
               }
             }, 
             child: Text('Logar')),
         ],
       ),
     );
+
+     
   }
+}
+
+class FormLogin extends StatefulWidget {
+  @override
+  State<FormLogin> createState() => _FormLoginState();
 }
 
 
